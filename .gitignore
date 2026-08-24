@@ -1,0 +1,17 @@
+# Environment variables
+flask/.env
+**/.env
+
+# Virtual environment
+.venv/
+venv/
+
+# Python generated files
+__pycache__/
+*.pyc
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store

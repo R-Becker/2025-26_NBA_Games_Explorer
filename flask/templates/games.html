@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Games</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>2025-26 NBA Games</h1>
+
+<table>
+
+    <tr>
+        <th>Date</th>
+        <th>Away</th>
+        <th>Score</th>
+        <th>Home</th>
+    </tr>
+
+    {% for game in games %}
+
+        <tr>
+            <td>{{ game.game_date }}</td>
+            <td>{{ game.away_team }}</td>
+            <td>{{ game.away_score }} - {{ game.home_score }}</td>
+            <td>{{ game.home_team }}</td>
+        </tr>
+
+    {% endfor %}
+
+</table>
+
+</body>
+
+</html>
