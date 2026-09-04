@@ -1,25 +1,31 @@
 from nba_api.stats.endpoints import leaguegamelog
 import pandas as pd
 
-# object from nba_api library
+# Retrieve team-level game logs for the 2025-26 NBA regular season.
+# Each game appears once for each participating team.
 game_log = leaguegamelog.LeagueGameLog(
     season="2025-26",
     season_type_all_star="Regular Season",
     player_or_team_abbreviation="T"  # sorted by team
 )
 
-games_log = game_log.get_data_frames()[0]   # convert into dataframe
+games_log = game_log.get_data_frames()[0]   
 
+# Store the processed game-level records.
 all_games = []
 
+# Convert the team-level game logs into one record per game.
 for game_id in games_log["GAME_ID"].unique():
 
+    # Select the two team records belonging to this game.
     game = games_log[games_log["GAME_ID"] == game_id]
 
+    # Standard NBA matchups use "vs." for the home team
+    # and "@" for the away team.
     home = game[game["MATCHUP"].str.contains("vs.", na=False)]
     away = game[game["MATCHUP"].str.contains("@", na=False)]
 
-    # Normal game
+    # Standard Game
     if len(home) == 1 and len(away) == 1:
 
         all_games.append({
@@ -40,6 +46,7 @@ for game_id in games_log["GAME_ID"].unique():
         })
 
     # Neutral-site / unusual matchup
+    # Preserve both team records and flag the game so it can be handled separately by the application.
     else:
         team1 = game.iloc[0]
         team2 = game.iloc[1]
@@ -62,4 +69,4 @@ for game_id in games_log["GAME_ID"].unique():
         })
 
 games = pd.DataFrame(all_games)
-games.to_csv("nba_2025_26_games.csv", index=False) # convert to csv
+games.to_csv("nba_2025_26_games.csv", index=False)
